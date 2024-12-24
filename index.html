@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copy Account</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+    }
+    .container {
+      text-align: center;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    h1 {
+      color: #4CAF50;
+    }
+    p {
+      color: #555;
+    }
+    .success {
+      color: #28a745;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>คัดลอกเลขบัญชี</h1>
+    <p>กำลังคัดลอกเลขบัญชี...</p>
+    <p id="status" class="success"></p>
+  </div>
+  <script>
+    // Initialize LIFF
+    async function main() {
+      try {
+        await liff.init({ liffId: "2005615503-ma6B9YgR" }); // ใส่ LIFF ID ของคุณที่นี่
+        copyToClipboard();
+      } catch (error) {
+        console.error("Error initializing LIFF: ", error);
+      }
+    }
+
+    // Copy text to clipboard
+    function copyToClipboard() {
+      const accountNumber = "123-456-789 ธนาคารตัวอย่าง";
+      navigator.clipboard.writeText(accountNumber)
+        .then(() => {
+          document.getElementById('status').textContent = "คัดลอกเลขบัญชีเรียบร้อยแล้ว!";
+          closeLIFF(); // ปิด LIFF หลังคัดลอกสำเร็จ
+        })
+        .catch(err => {
+          document.getElementById('status').textContent = "ไม่สามารถคัดลอกได้ โปรดลองอีกครั้ง!";
+          console.error("Error copying to clipboard: ", err);
+        });
+    }
+
+    // Close LIFF after completing
+    function closeLIFF() {
+      if (liff.isInClient()) {
+        liff.closeWindow();
+      }
+    }
+
+    main();
+  </script>
+</body>
+</html>
